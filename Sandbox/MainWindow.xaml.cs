@@ -30,9 +30,19 @@ namespace Sandbox
 
             DebugConsole.InitDebugConsole();
             InitializeComponent();
+
+            
             
 
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            DebugConsole.Trace("Test message");
+            DebugConsole.Info("fsdfdsfdsfdsfd sdfdsf");
+            DebugConsole.Warn("WARNING dfsfdfds");
+            DebugConsole.Error("sdfdsf");
+            DebugConsole.Critical("hdhbf sdfbshbdsfs sdbf shdfb sbdfh bsdhfb sdfb hsbfhsbfsdhfbsdhfbdsfhsdbfdsfbdsfb hsbdf sdbf hsdbf hsdbf shdfb sd");
+        }
     }
 }
