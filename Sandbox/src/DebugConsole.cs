@@ -1,4 +1,4 @@
-﻿#if DEBUG
+﻿//#if DEBUG
 
 //// Comment the following line to disable dumping logging to "log.txt" file ///
 //#define ENABLE_LOGGING_TO_FILE
@@ -7,23 +7,14 @@
 
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace Sandbox.src
+namespace WPFDebugger
 {
-
-    internal enum Severity
-    {
-        TRACE,
-        INFO,
-        WARNING,
-        ERROR,
-        CRITICAL
-    }
-
-    internal static class DebugConsole
+    public static class DebugConsole
     {
         [DllImport(@"kernel32.dll", SetLastError = true)]
         static extern bool AllocConsole();
@@ -34,10 +25,34 @@ namespace Sandbox.src
         [DllImport(@"user32.dll")]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
+        private enum Severity
+        {
+            TRACE,
+            INFO,
+            WARNING,
+            ERROR,
+            CRITICAL
+        }
+
+        private struct Timers
+        {
+            public Timers(string name, Stopwatch watch)
+            {
+                Name = name;
+                Watch = watch;
+            }
+
+            public string Name;
+            public Stopwatch Watch;
+        }
+
         const int SwHide = 0;
         const int SwShow = 5;
 
+        private static List<Timers> s_timers = new List<Timers>();
+
         // Creates Console window
+        [Conditional("DEBUG")]
         public static void InitDebugConsole()
         {
             var handle = GetConsoleWindow();
@@ -59,13 +74,18 @@ namespace Sandbox.src
         }
 
         // Hides console window
+        [Conditional("DEBUG")]
         public static void HideDebugConsole()
         {
             var handle = GetConsoleWindow();
             ShowWindow(handle, SwHide);
         }
 
+
+        // Debugging messages functions/////////////////////////////////////////////////////////////////////
+
         // Trace message access point function
+        [Conditional("DEBUG")]
         public static void Trace(string message)
         {
             Printf($"{CreateTimestamp()} {message}", Severity.TRACE);
@@ -76,6 +96,7 @@ namespace Sandbox.src
         }
 
         // Information message access point function
+        [Conditional("DEBUG")]
         public static void Info(string message)
         {
             Printf($"{CreateTimestamp()} {message}", Severity.INFO);
@@ -86,6 +107,7 @@ namespace Sandbox.src
         }
 
         // Warning message access point function
+        [Conditional("DEBUG")]
         public static void Warn(string message)
         {
             Printf($"{CreateTimestamp()} {message}", Severity.WARNING);
@@ -96,6 +118,7 @@ namespace Sandbox.src
         }
 
         // Error message access point function
+        [Conditional("DEBUG")]
         public static void Error(string message)
         {
             Printf($"{CreateTimestamp()} {message}", Severity.ERROR);
@@ -106,6 +129,7 @@ namespace Sandbox.src
         }
 
         // Critical message access point function
+        [Conditional("DEBUG")]
         public static void Critical(string message)
         {
             Printf($"{CreateTimestamp()} {message}", Severity.CRITICAL);
@@ -115,9 +139,15 @@ namespace Sandbox.src
 #endif
         }
 
-
+        // Adds a new line character to the console
+        [Conditional("DEBUG")]
+        public static void NewLine()
+        {
+            Console.WriteLine('\n');
+        }
 
         // Colorize debug message strings according to there severity
+        [Conditional("DEBUG")]
         private static void Printf(string text, Severity severity)
         {
             switch (severity)
@@ -148,6 +178,7 @@ namespace Sandbox.src
         }
 
         // Logs debug console messages to a specified file in a specified path
+        [Conditional("DEBUG")]
         private static void LogToFile(string ?path, string metadata, string message)
         {
             string filePath = path == null ? $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\log.txt" : path;
@@ -160,7 +191,31 @@ namespace Sandbox.src
         }
 
 
+        // Timing/Performance profiling functions//////////////////////////////////////////////////////////////
+
+        // Start profile function
+        [Conditional("DEBUG")]
+        public static void StartProfile(string name)
+        {
+            Stopwatch timer = new Stopwatch();
+            s_timers.Add(new Timers(name, timer));
+
+            timer.Start();
+        }
+
+        // Stops and creates the result for the last requested timer
+        [Conditional("DEBUG")]
+        public static void StopProfile()
+        {
+            Timers timer = s_timers[s_timers.Count - 1];
+            timer.Watch.Stop();
+
+            Info($"\"{timer.Name}\" took {timer.Watch.ElapsedMilliseconds.ToString()}ms.");
+
+            if(s_timers.Count > 0)
+                s_timers.Remove(s_timers[s_timers.Count - 1]);
+        }
     }
 }
 
-#endif
+//#endif
