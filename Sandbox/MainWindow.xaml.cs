@@ -36,25 +36,26 @@ namespace Sandbox
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            DebugConsole.StartProfile("Total");
+            /* DebugConsole.StartProfile("Total");
 
-            DebugConsole.Trace("Test message");
-            DebugConsole.NewLine();
+             DebugConsole.Trace("Test message");
+             DebugConsole.NewLine();
 
-            DebugConsole.StartProfile("10000 prime number calculator");
-            //DebugConsole.Info("fsdfdsfdsfdsfd sdfdsf");
-            //DebugConsole.Warn("WARNING dfsfdfds");
-            //DebugConsole.Error("sdfdsf");
-            FindPrimeNumber(10000);
-            DebugConsole.StopProfile();
+             DebugConsole.StartProfile("10000 prime number calculator");
+             //DebugConsole.Info("fsdfdsfdsfdsfd sdfdsf");
+             //DebugConsole.Warn("WARNING dfsfdfds");
+             //DebugConsole.Error("sdfdsf");
+             FindPrimeNumber(10000);
+             DebugConsole.StopProfile();
 
-            DebugConsole.StartProfile("100 prime number calculator");
-            FindPrimeNumber(100);
-            DebugConsole.StopProfile();
+             DebugConsole.StartProfile("100 prime number calculator");
+             FindPrimeNumber(100);
+             DebugConsole.StopProfile();
 
-            DebugConsole.Critical("hdhbf sdfbshbdsfs sdbf shdfb sbdfh bsdhfb sdfb hsbfhsbfsdhfbsdhfbdsfhsdbfdsfbdsfb hsbdf sdbf hsdbf hsdbf shdfb sd");
+             DebugConsole.Critical("hdhbf sdfbshbdsfs sdbf shdfb sbdfh bsdhfb sdfb hsbfhsbfsdhfbsdhfbdsfhsdbfdsfbdsfb hsbdf sdbf hsdbf hsdbf shdfb sd");
 
-            DebugConsole.StopProfile();
+             DebugConsole.StopProfile();*/
+            TestLogs();
         }
 
         public long FindPrimeNumber(int n)
@@ -82,5 +83,32 @@ namespace Sandbox
             }
             return (--a);
         }
+
+
+        private void TestLogs()
+        {
+
+            char[] vs = { 'A', 'r', 'u', 'n' };
+
+
+            Int64 a = 64;
+            UInt32 b = 32;
+            UInt64 c = 64;
+
+            DebugConsole.Trace("string");
+            DebugConsole.Trace(new List<string> { "name", "value" });
+            DebugConsole.Trace(true);
+            DebugConsole.Trace('A');
+            DebugConsole.Trace(vs);
+            DebugConsole.Trace(10.1221m);
+            DebugConsole.Trace(3.1415d);
+            DebugConsole.Trace(32);
+            DebugConsole.Trace(a);
+            DebugConsole.Trace(b);
+            DebugConsole.Trace(c);
+
+            DebugConsole.Assert(a == b, "Test", "Detaild test");
+        }
+
     }
 }
