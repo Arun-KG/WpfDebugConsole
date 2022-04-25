@@ -106,8 +106,6 @@ namespace Sandbox
             DebugConsole.Trace(a);
             DebugConsole.Trace(b);
             DebugConsole.Trace(c);
-
-            DebugConsole.Assert(a == b, "Test", "Detaild test");
         }
 
     }

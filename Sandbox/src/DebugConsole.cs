@@ -689,6 +689,7 @@ namespace WPFDebugger
             }
         }
 
+        [Conditional("DEBUG")]
         private static void ResetConsoleColor()
         {
             Console.ForegroundColor = ConsoleColor.White;
