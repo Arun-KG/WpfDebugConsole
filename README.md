@@ -1,2 +1,2 @@
 # WpfDebugConsole
-A Debug console for C# WPF applications
+A better debug console for C# WPF applications
